@@ -1,0 +1,18 @@
+p
+  a.button(href='/books/new') Create New Book
+p
+  | Filters 
+  if all 
+    a.active(href='/books') All
+  else
+    a(href='/books') All
+  |   
+  if overdue
+    a.active(href='/books?filter=overdue') Overdue
+  else
+    a(href='/books?filter=overdue') Overdue
+  |  
+  if checked_out
+    a.active(href='/books?filter=checked_out') Checked Out
+  else 
+    a(href='/books?filter=checked_out') Checked Out

@@ -1,0 +1,18 @@
+p
+  a.button(href='/loans/new') Create New Loan
+p
+  | Filters 
+  if all 
+    a.active(href='/loans/all') All
+  else
+    a(href='/loans/all') All
+  |    
+  if overdue
+    a.active(href='/loans?filter=overdue') Overdue
+  else
+    a(href='/loans?filter=overdue') Overdue
+  |  
+  if checked_out
+    a.active(href='/loans?filter=checked_out') Checked Out
+  else 
+    a(href='/loans?filter=checked_out') Checked Out

@@ -1,0 +1,22 @@
+nav
+  ul
+    li
+      if homePage
+        a.active(href="/") Home
+      else
+        a(href="/") Home
+    li
+      if booksPage
+        a.active(href="/books") Books
+      else
+        a(href="/books") Books
+    li
+      if patronsPage
+        a.active(href="/patrons") Patrons
+      else
+        a(href="/patrons") Patrons
+    li
+      if loansPage
+        a.active(href="/loans") Loans
+      else
+        a(href="/loans") Loans
