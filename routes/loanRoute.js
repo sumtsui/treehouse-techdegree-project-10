@@ -17,10 +17,7 @@ router.get('/', function(req, res, next) {
             returned_on: { [Op.eq]: null }
           }
         },
-        include: [
-          { model: Book },
-          { model: Patron },
-        ]
+        include: [{ model: Book }, { model: Patron }]
       })
       .then(myFunc.formatDate)
       .then(loans => res.render('loans/overdue', { loans, overdue: true, loansPage: true }))
@@ -29,11 +26,8 @@ router.get('/', function(req, res, next) {
   else if (req.query.filter === 'checked_out') {
     Loan
       .findAll({
-        where: { returned_on: { [Op.ne]: null } },
-        include: [
-          { model: Book },
-          { model: Patron },
-        ]
+        where: { returned_on: { [Op.eq]: null } },
+        include: [{ model: Book }, { model: Patron }]
       })
       .then(myFunc.formatDate)
       .then(loans => res.render('loans/checked_out', { loans, checked_out: true, loansPage: true }))
@@ -45,27 +39,21 @@ router.get('/', function(req, res, next) {
 router.get('/all', function (req, res, next) {
   Loan
     .findAll({
-      include: [
-        { model: Patron },
-        { model: Book },
-      ]
+      include: [{ model: Patron }, { model: Book }]
     })
     .then(myFunc.formatDate)
     .then(loans => res.render('loans/all', { loans, all: true, loansPage: true }))
+    .catch(next)
 });
 
 router.get('/new', function (req, res, next) {
-  Promise.all([
-    Book.findAll(),
-    Patron.findAll(),
-  ])
-  .then(results => {
-    return {
-      books: results[0],
-      patrons: results[1],
-    }
-  })
-    .then(results => res.render('loans/new', { books: results.books, patrons: results.patrons, loansPage: true }));
+  Promise
+    .all([
+      Book.findAll(),
+      Patron.findAll(),
+    ])
+    .then(results => res.render('loans/new', { books: results[0], patrons: results[1], loansPage: true }))
+    .catch(next)
 });
 
 router.post('/new', function (req, res, next) {
@@ -83,6 +71,7 @@ router.get('/return/:id', function (req, res, next) {
     })
     .then(myFunc.formatDate)
     .then(loan => res.render('loans/return', { loan, loansPage: true } ))
+    .catch(next)
 });
 
 router.post('/return/:id', function (req, res, next) {

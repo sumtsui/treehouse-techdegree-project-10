@@ -96,3 +96,12 @@ input {
 input[type=text], select {
   margin-left: 10px;
 }
+
+div.errors {
+  color: lightcoral;
+  border-bottom: 1px solid lightcoral;
+}
+div.errors p {
+  margin: 0;
+  padding: 0;
+}

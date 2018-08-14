@@ -7,6 +7,8 @@ const Loan = require('../models').Loan;
 const Patron = require('../models').Patron;
 const myFunc = require('../js/myFunc');
 
+let state;
+
 router.get('/', function(req, res, next) {
   if (req.query.filter === 'overdue') {
     Loan
@@ -24,7 +26,7 @@ router.get('/', function(req, res, next) {
   else if (req.query.filter === 'checked_out') {
     Loan
       .findAll({
-        where: { returned_on: { [Op.ne]: null } },
+        where: { returned_on: { [Op.eq]: null } },
         include: { model: Book }
       })
       .then(loans => res.render('books/checked_out', { loans, checked_out: true, booksPage: true }));
@@ -51,10 +53,8 @@ router.get('/:id', (req, res, next) => {
         include: { model: Patron }
       })
     ])
-    .then(results => {
-      results[1] = myFunc.formatDate(results[1]);
-      return results;
-    })
+    .then(results => [results[0], myFunc.formatDate(results[1])])
+    .then(results => state = results)
     .then(results => res.render('books/detail', { book: results[0], loans: results[1], booksPage: true }))
     .catch(next)
 })
@@ -63,7 +63,13 @@ router.post('/new', (req, res, next) => {
   Book
     .create(req.body)
     .then(() => res.redirect('/books/all'))
-    .catch(next)
+    .catch(err => {
+        if (err.name === 'SequelizeValidationError') {
+          res.render('books/new', { inputs: req.body, booksPage: true, errors: err.errors });
+        }
+        next(err);
+      }
+    )
 })
 
 router.post('/:id', (req, res, next) => {
@@ -71,7 +77,13 @@ router.post('/:id', (req, res, next) => {
     .findById(req.params.id)
     .then(book => book.update(req.body))
     .then(() => res.redirect('/books/all'))
-    .catch(next)
+    .catch(err => {
+        if (err.name === 'SequelizeValidationError') {
+          res.render('books/detail', { book: state[0], loans: state[1], booksPage: true, errors: err.errors })
+        }
+        next(err);
+      }
+    )
 })
 
 module.exports = router;

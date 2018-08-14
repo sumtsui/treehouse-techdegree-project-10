@@ -2,18 +2,19 @@ extends ../layout
 
 block content
   h1 New Book
+  include ../errorMsg
   form(action='/books/new' method='post')
     p
       label(for='title') Title
-      input#title(name='title' type='text')
+      input#title(name='title' type='text' value=(inputs ? inputs.title : ''))
     p
       label(for='author') Author
-      input#author(name='author' type='text')
+      input#author(name='author' type='text' value=(inputs ? inputs.author : ''))
     p
       label(for='genre') Genre
-      input#genre(name='genre' type='text')
+      input#genre(name='genre' type='text' value=(inputs ? inputs.genre : ''))
     p
       label(for='first_published') First Published
-      input#first_published(name='first_published' type='text')
+      input#first_published(name='first_published' type='text' value=(inputs ? inputs.first_published : ''))
     p
       input(type='submit', value='Create New Book')

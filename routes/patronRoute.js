@@ -4,7 +4,7 @@ const Patron = require('../models').Patron;
 const Book = require('../models').Book;
 const Loan = require('../models').Loan;
 const sequelize = require('../models').sequelize;
-const Op = sequelize.Op;
+const Op = sequelize.Op;  // Sequelize operator module
 const myFunc = require('../js/myFunc');
 
 router.get('/', function(req, res, next) {
@@ -30,10 +30,7 @@ router.get('/:id', function (req, res, next) {
         include: { model: Book }
       })
     ])
-    .then(results => {
-      results[1] = myFunc.formatDate(results[1]);
-      return results;
-    })
+    .then(results => [results[0], myFunc.formatDate(results[1])])
     .then(results => res.render('patrons/detail', { patron: results[0], loans: results[1], patronsPage: true }));
 });
 

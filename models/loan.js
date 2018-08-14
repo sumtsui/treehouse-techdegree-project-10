@@ -2,11 +2,24 @@
 
 module.exports = (sequelize, DataTypes) => {
   var Loan = sequelize.define('Loan', {
-    book_id: DataTypes.INTEGER,
-    patron_id: DataTypes.INTEGER,
-    loaned_on: DataTypes.DATE,
-    return_by: DataTypes.DATE,
-    returned_on: DataTypes.DATE,
+    book_id: {
+      type: DataTypes.INTEGER,
+    },
+    patron_id: {
+      type: DataTypes.INTEGER,
+    },
+    loaned_on: {
+      type: DataTypes.DATE,
+      validate: { notEmpty: { msg: "Loaned-on date is required" } }
+    },
+    return_by: {
+      type: DataTypes.DATE,
+      validate: { notEmpty: { msg: "Return-by date is required" } }
+    },
+    returned_on: {
+      type: DataTypes.DATE,
+      validate: { notEmpty: { msg: "Returned-on date is required" } }
+    },
   }, {
     timestamps: false,
     underscored: true,

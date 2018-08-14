@@ -1,12 +1,33 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var Patron = sequelize.define('Patron', {
-    first_name: DataTypes.STRING,
-    last_name: DataTypes.STRING,
-    address: DataTypes.STRING,
-    email: DataTypes.STRING,
-    library_id: DataTypes.STRING,
-    zip_code: DataTypes.INTEGER,
+    first_name: {
+      type: DataTypes.STRING,
+      validate: { notEmpty: { msg: "First name is required" } }
+    },
+    last_name: {
+      type: DataTypes.STRING,
+      validate: { notEmpty: { msg: "Last name is required" } }
+    },
+    address: {
+      type: DataTypes.STRING,
+      validate: { notEmpty: { msg: "Address is required" } }
+    },
+    email: {
+      type: DataTypes.STRING,
+      validate: { 
+        notEmpty: { msg: "Email is required" },
+        isEmail: { msg: "Please enter vaild email" }
+      }
+    },
+    library_id: {
+      type: DataTypes.STRING,
+      validate: { notEmpty: { msg: "Library ID is required" } }
+    },
+    zip_code: {
+      type: DataTypes.INTEGER,
+      validate: { notEmpty: { msg: "Zipcode is required" } }
+    }
   }, {
     timestamps: false,
     underscored: true

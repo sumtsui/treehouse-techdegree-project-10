@@ -1,8 +1,10 @@
 module.exports = {
   
   formatDate: arg => {
-    // if arg is an array
-    if (arg.length > 0) {
+    // if arg is an empty array
+    if (arg.length === 0) return arg;
+    // if arg is a not empty array
+    else if (arg.length > 0) {
       return arg.map(loan => 
         loan = {
           ...loan.dataValues,
@@ -10,7 +12,8 @@ module.exports = {
           return_by: loan.return_by.substring(0, 10),
           returned_on: (loan.returned_on === null) ? null : loan.returned_on.substring(0, 10),
       })
-    } else {
+    } 
+    else {
     // if not array, assume arg is an object
       return {
         ...arg.dataValues,

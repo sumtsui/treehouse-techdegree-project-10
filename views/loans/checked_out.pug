@@ -10,7 +10,6 @@ block content
         th Patron 
         th Loaned on
         th Return by 
-        th Returned on
         th Action
     tbody
       each loan in loans
@@ -21,6 +20,5 @@ block content
             a(href=`/patrons/${loan.patron_id}`) #{loan.Patron.first_name} #{loan.Patron.last_name}
           td #{loan.loaned_on}
           td #{loan.return_by}
-          td
           td
             a.button(href=`/loans/return/${loan.id}`) Return Book
