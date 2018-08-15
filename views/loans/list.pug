@@ -1,8 +1,13 @@
 extends ../layout
 
 block content
-  h1 Loans
-  include nav
+  if all
+    h1 Loans
+  if overdue
+    h1 Overdue Loans
+  if checked_out
+    h1 Checked Out Books
+  include filter
   table
     thead
       tr

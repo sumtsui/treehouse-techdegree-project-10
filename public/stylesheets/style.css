@@ -99,9 +99,39 @@ input[type=text], select {
 
 div.errors {
   color: lightcoral;
-  border-bottom: 1px solid lightcoral;
+  border: 1px solid lightcoral;
+  display: inline-block;
+  padding: .5em;
+  border-radius: 10px;
 }
 div.errors p {
   margin: 0;
   padding: 0;
+}
+
+form.search {
+  display: inline-block;
+  margin-left: 2em;
+}
+.button-p {
+  display: inline-block;
+}
+form.search button {
+  font-size: .8em;
+  width: 36px;
+  height: 36px;
+  border-radius: 0 2px 2px 0;
+  background: white;
+}
+form.search input {
+  padding: .65em;
+  border: 1px solid lightgray;
+  background: #EADEDB;
+  border-radius: 2px 0 0 2px;
+}
+form.search button:hover {
+  cursor: pointer;
+}
+.search-header {
+  margin-top: 1.6em;
 }

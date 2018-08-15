@@ -2,24 +2,25 @@ extends ../layout
 
 block content
   h1 New Patron
+  include ../errorMsg
   form(action='/patrons/new' method='post')
     p
       label(for='first_name') First Name
-      input#first_name(type='text' name='first_name')
+      input#first_name(type='text' name='first_name' value=(inputs ? inputs.first_name : ''))
     p
       label(for='last_name') Last Name
-      input#last_name(type='text' name='last_name')
+      input#last_name(type='text' name='last_name' value=(inputs ? inputs.last_name : ''))
     p
       label(for='address')  Address
-      input#address(type='text' name='address')
+      input#address(type='text' name='address' value=(inputs ? inputs.address : ''))
     p
       label(for='email') Email
-      input#email(type='text' name='email')
+      input#email(type='text' name='email' value=(inputs ? inputs.email : ''))
     p
       label(for='library_id') Library ID
-      input#library_id(type='text' name='library_id')
+      input#library_id(type='text' name='library_id' value=(inputs ? inputs.library_id : ''))
     p
       label(for='zip_code') Zip Code
-      input#zip_code(type='text' name='zip_code')
+      input#zip_code(type='text' name='zip_code' value=(inputs ? inputs.zip_code : ''))
     p
       input(type='submit', value='Create New Patron')

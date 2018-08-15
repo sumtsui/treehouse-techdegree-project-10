@@ -2,6 +2,7 @@ extends ../layout
 
 block content
   h1 Return Book
+  include ../errorMsg
   p
     strong Book Title: 
     | #{loan.Book.title}
@@ -17,6 +18,6 @@ block content
   form(action=`/loans/return/${loan.id}` method='post')
     p
       label(for='returned_on') Returned on:
-      input#returned_on(name='returned_on' type='text', value=`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`)
+      input#returned_on(name='returned_on' type='text', value=`${new Date().toJSON().slice(0, 10)}`)
     p
       input(type='submit', value='Return Book')

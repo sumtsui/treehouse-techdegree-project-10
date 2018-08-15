@@ -1,0 +1,7 @@
+p
+  | Filters 
+  a(href='/books' class=(all ? 'active' : '')) All
+  |   
+  a(href='/books?filter=overdue' class=(overdue ? 'active' : '')) Overdue
+  |  
+  a(href='/books?filter=checked_out' class=(checked_out ? 'active' : '')) Checked Out

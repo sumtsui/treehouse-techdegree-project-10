@@ -1,22 +1,10 @@
 nav
   ul
     li
-      if homePage
-        a.active(href="/") Home
-      else
-        a(href="/") Home
+      a(href="/" class=(homePage ? 'active' : '')) Home
     li
-      if booksPage
-        a.active(href="/books") Books
-      else
-        a(href="/books") Books
+      a(href="/books" class=(booksPage ? 'active' : '')) Books
     li
-      if patronsPage
-        a.active(href="/patrons") Patrons
-      else
-        a(href="/patrons") Patrons
+      a(href="/patrons" class=(patronsPage ? 'active' : '')) Patrons
     li
-      if loansPage
-        a.active(href="/loans") Loans
-      else
-        a(href="/loans") Loans
+      a(href="/loans" class=(loansPage ? 'active' : '')) Loans

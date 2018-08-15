@@ -2,8 +2,10 @@ extends ../layout
 
 block content
   h1 Patrons
-  p
+  p.button-p
     a.button(href='/patrons/new') Create New Patron
+  include ../searchField
+  include ../searchHeader
   table
     thead
       tr

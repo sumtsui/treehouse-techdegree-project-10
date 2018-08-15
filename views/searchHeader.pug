@@ -1,0 +1,8 @@
+if search
+  if (books && books.length===0 || patrons && patrons.length===0)
+    h3.search-header No result found for
+      i=` ${term}`
+  else
+    h3.search-header Showing search result of
+      i=` ${term}`
+      | :

@@ -21,7 +21,12 @@ router.get('/', function(req, res, next) {
         },
         include: { model: Book }
       })
-      .then(loans => res.render('books/overdue', { loans, overdue: true, booksPage: true }));
+      .then(loans => res.render('books/list', {
+        books: loans.map(i => i.Book),
+        overdue: true,
+        booksPage: true
+      }))
+      .catch(next)
   }
   else if (req.query.filter === 'checked_out') {
     Loan
@@ -29,7 +34,12 @@ router.get('/', function(req, res, next) {
         where: { returned_on: { [Op.eq]: null } },
         include: { model: Book }
       })
-      .then(loans => res.render('books/checked_out', { loans, checked_out: true, booksPage: true }));
+      .then(loans => res.render('books/list', {
+        books: loans.map(i => i.Book),
+        checked_out: true,
+        booksPage: true
+      }))
+      .catch(next)
   }
   else res.redirect('/books/all');
 });
@@ -37,7 +47,12 @@ router.get('/', function(req, res, next) {
 router.get('/all', function (req, res, next) {
   Book
     .findAll()
-    .then(books => res.render('books/all', { books, all: true, booksPage: true }));
+    .then(books => res.render('books/list', {
+      books,
+      all: true,
+      booksPage: true
+    }))
+    .catch(next)
 });
 
 router.get('/new', function (req, res, next) {
@@ -55,7 +70,11 @@ router.get('/:id', (req, res, next) => {
     ])
     .then(results => [results[0], myFunc.formatDate(results[1])])
     .then(results => state = results)
-    .then(results => res.render('books/detail', { book: results[0], loans: results[1], booksPage: true }))
+    .then(results => res.render('books/detail', {
+      book: results[0],
+      loans: results[1],
+      booksPage: true 
+    }))
     .catch(next)
 })
 
@@ -64,12 +83,37 @@ router.post('/new', (req, res, next) => {
     .create(req.body)
     .then(() => res.redirect('/books/all'))
     .catch(err => {
-        if (err.name === 'SequelizeValidationError') {
-          res.render('books/new', { inputs: req.body, booksPage: true, errors: err.errors });
-        }
-        next(err);
+      if (err.name === 'SequelizeValidationError') {
+        res.render('books/new', {
+          inputs: req.body,
+          booksPage: true,
+          errors: err.errors
+        });
       }
-    )
+      next(err);
+    })
+})
+
+router.post('/all', (req, res, next) => {
+  const query = req.body.search_field;
+  Book
+    .findAll({
+      where: {
+        [Op.or]: [
+          { 'title': { [Op.like]: '%' + query + '%' } },
+          { 'author': { [Op.like]: '%' + query + '%' } },
+          { 'genre': { [Op.like]: '%' + query + '%' } },
+          { 'first_published': { [Op.like]: '%' + query + '%' } }
+        ]
+      }
+    })
+    .then(books => res.render('books/list', {
+      books,
+      booksPage: true,
+      search: true,
+      term: query
+    }))
+    .catch(next)
 })
 
 router.post('/:id', (req, res, next) => {
@@ -78,12 +122,17 @@ router.post('/:id', (req, res, next) => {
     .then(book => book.update(req.body))
     .then(() => res.redirect('/books/all'))
     .catch(err => {
-        if (err.name === 'SequelizeValidationError') {
-          res.render('books/detail', { book: state[0], loans: state[1], booksPage: true, errors: err.errors })
-        }
-        next(err);
+      if (err.name === 'SequelizeValidationError') {
+        res.render('books/detail', {
+          book: state[0],
+          loans: state[1],
+          booksPage: true, 
+          errors: err.errors,
+          inputs: req.body
+        })
       }
-    )
+      next(err);
+    })
 })
 
 module.exports = router;

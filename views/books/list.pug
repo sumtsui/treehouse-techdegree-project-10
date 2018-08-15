@@ -1,8 +1,17 @@
 extends ../layout
 
 block content
-  h1 Books
-  include nav
+  if overdue
+    h1 Overdue Books
+  if checked_out
+    h1 Checked Out Books
+  else
+    h1 Books
+  p.button-p
+    a.button(href='/books/new') Create New Book
+  include ../searchField
+  include filter
+  include ../searchHeader  
   table
     thead
       tr
