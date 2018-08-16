@@ -72,7 +72,6 @@ router.get('/page/:id', function (req, res, next) {
       }),
       Book.findAndCountAll(),
     ])
-    .then(myFunc.log)
     .then(r => {
       return (r[0].length === 0) ?
         next(new Error('Page not found :/'))
@@ -99,7 +98,6 @@ router.get('/:id', (req, res, next) => {
         include: { model: Patron }
       })
     ])
-    .then(myFunc.log)
     .then(results => {
       return (results[0] === null) ?
         next(new Error('Page not found :/'))

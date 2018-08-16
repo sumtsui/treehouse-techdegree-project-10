@@ -67,7 +67,6 @@ router.get('/page/:id', function (req, res, next) {
       }),
       Patron.findAndCountAll(),
     ])
-    .then(myFunc.log)
     .then(r => {
       return (r[0].length === 0) ?
         next(new Error('Page not found :/'))

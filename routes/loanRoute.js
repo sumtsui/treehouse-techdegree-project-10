@@ -87,7 +87,7 @@ router.get('/new', function (req, res, next) {
     .then(results => state = results)
     .then(results => res.render('loans/new', {
       ...results,
-      loansPage: true 
+      loansPage: true
     }))
     .catch(next)
 });
@@ -120,8 +120,7 @@ router.post('/new', function (req, res, next) {
     .catch(err => {
       if (err.name === 'SequelizeValidationError') {
         res.render('loans/new', {
-          books: state[0],
-          patrons: state[1],
+          ...state,
           inputs: req.body,
           loansPage: true,
           errors: err.errors
