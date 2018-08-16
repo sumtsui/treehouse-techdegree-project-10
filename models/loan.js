@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     loaned_on: {
       type: DataTypes.DATE,
       validate: {
-        notEmpty: { msg: "Please enter loaned-on date" },
+        // notEmpty: { msg: "Please enter loaned-on date" },
         isDate: { msg: "Please enter a vaild loaned_on date" },
         // isAfter: {
         //   args: `${new Date((new Date()).getTime() - (1 * 86400000)).toJSON().slice(0, 10)}`,
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     return_by: {
       type: DataTypes.DATE,
       validate: { 
-        notEmpty: { msg: "Please enter return-by date" },
+        // notEmpty: { msg: "Please enter return-by date" },
         isDate: { msg: "Please enter a vaild return-by date" },
         // isAfter: {
         //   args: `${new Date().toJSON().slice(0, 10)}`,
@@ -35,12 +35,12 @@ module.exports = (sequelize, DataTypes) => {
     returned_on: {
       type: DataTypes.DATE,
       validate: {
-        notEmpty: { msg: "Returned-on date is required" },
+        // notEmpty: { msg: "Returned-on date is required" },
         isDate: { msg: "Returned-on date is not vaild" },
-        isAfter: {
-          args: `${new Date((new Date()).getTime() - (1 * 86400000)).toJSON().slice(0, 10)}`,
-          msg: 'Returned-on date can not be eariler than today'
-        }
+        // isAfter: {
+        //   args: `${new Date((new Date()).getTime() - (1 * 86400000)).toJSON().slice(0, 10)}`,
+        //   msg: 'Returned-on date can not be eariler than today'
+        // }
       }
     },
   }, {
