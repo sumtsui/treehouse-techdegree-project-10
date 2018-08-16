@@ -10,18 +10,18 @@ const myFunc = require('../js/myFunc');
 let state;
 
 router.get('/', function(req, res, next) {
-  res.redirect('/patrons/all');
+  res.redirect('/patrons/page/1');
 });
 
-router.get('/all', function (req, res, next) {
-  Patron
-    .findAll()
-    .then(patrons => res.render('patrons/list', {
-      patrons,
-      patronsPage: true
-    }))
-    .catch(next)
-});
+// router.get('/all', function (req, res, next) {
+//   Patron
+//     .findAll()
+//     .then(patrons => res.render('patrons/list', {
+//       patrons,
+//       patronsPage: true
+//     }))
+//     .catch(next)
+// });
 
 router.get('/new', function (req, res, next) {
   res.render('patrons/new', { patronsPage: true });
@@ -36,6 +36,12 @@ router.get('/:id', function (req, res, next) {
         include: { model: Book }
       })
     ])
+    .then(results => {
+      return (results[0] === null) ?
+        next(new Error('Page not found :/'))
+        :
+        results;
+    })
     .then(results => [
       results[0],
       myFunc.formatDate(results[1])
@@ -49,10 +55,40 @@ router.get('/:id', function (req, res, next) {
     .catch(next)
 });
 
+/* --- Pagination route --- */
+router.get('/page/:id', function (req, res, next) {
+  const perPage = 10;
+  Promise
+    .all([
+      Patron.findAll({
+        offset: perPage * (req.params.id - 1),
+        limit: perPage,
+        order: [['id', 'DESC']]
+      }),
+      Patron.findAndCountAll(),
+    ])
+    .then(myFunc.log)
+    .then(r => {
+      return (r[0].length === 0) ?
+        next(new Error('Page not found :/'))
+        :
+        r;
+    })
+    .then(r => res.render('patrons/list', {
+      patrons: r[0],
+      totalItems: r[1].count,
+      all: true,
+      patronsPage: true,
+      perPage,
+      currentPageId: req.params.id
+    }))
+    .catch(next)
+});
+
 router.post('/new', function (req, res, next) {
   Patron
     .create(req.body)
-    .then(() => res.redirect('/patrons/all'))
+    .then(() => res.redirect('/patrons/page/1'))
     .catch(err => {
       if (err.name === 'SequelizeValidationError') {
         res.render('patrons/new', {
@@ -91,7 +127,7 @@ router.post('/:id', function (req, res, next) {
   Patron
     .findById(req.params.id)
     .then(patron => patron.update(req.body))
-    .then(() => res.redirect('/patrons/all'))
+    .then(() => res.redirect('/patrons/page/1'))
     .catch(err => {
       if (err.name === 'SequelizeValidationError') {
         res.render('patrons/detail', {

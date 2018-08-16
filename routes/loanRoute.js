@@ -49,7 +49,8 @@ router.get('/', function(req, res, next) {
 router.get('/all', function (req, res, next) {
   Loan
     .findAll({
-      include: [{ model: Patron }, { model: Book }]
+      include: [{ model: Patron }, { model: Book }],
+      order: [['id', 'DESC']]
     })
     .then(myFunc.formatDate)
     .then(loans => res.render('loans/list', {
@@ -65,11 +66,27 @@ router.get('/new', function (req, res, next) {
     .all([
       Book.findAll(),
       Patron.findAll(),
+      Loan.findAll({
+        where: { returned_on: { [Op.eq]: null } },
+        include: [{ model: Book }]
+      })
     ])
+    .then(results => {
+      let checkedOutBookTitles = results[2].map(i => i.Book.title);
+      let allBooks = results[0];
+      let availableBooks = allBooks.filter(i => checkedOutBookTitles.indexOf(i.title) < 0);
+      results[0] = availableBooks;
+      return results;
+    })
+    .then(results => {
+      return {
+        books: results[0],
+        patrons: results[1]
+      }
+    })
     .then(results => state = results)
     .then(results => res.render('loans/new', {
-      books: results[0], 
-      patrons: results[1], 
+      ...results,
       loansPage: true 
     }))
     .catch(next)
@@ -80,6 +97,12 @@ router.get('/return/:id', function (req, res, next) {
     .findOne({
       where: { id: { [Op.eq]: req.params.id } },
       include: [{ model: Book }, { model: Patron }]
+    })
+    .then(result => {
+      return (result === null) ?
+        next(new Error('Page not found :/'))
+        :
+        result;
     })
     .then(myFunc.formatDate)
     .then(loan => state = loan)

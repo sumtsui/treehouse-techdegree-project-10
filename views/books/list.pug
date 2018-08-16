@@ -3,27 +3,31 @@ extends ../layout
 block content
   if overdue
     h1 Overdue Books
-  if checked_out
+  else if checked_out
     h1 Checked Out Books
   else
     h1 Books
-  p.button-p
-    a.button(href='/books/new') Create New Book
-  include ../searchField
-  include filter
-  include ../searchHeader  
-  table
-    thead
-      tr
-        th Title
-        th Author
-        th Genre
-        th Year Released
-    tbody
-      each book in books
+  .header  
+    p.button-p
+      a.button(href='/books/new') Create New Book
+    include ../searchField
+    include filter
+    include ../searchHeader
+  .table-body
+    table
+      thead
         tr
-          td
-            a(href=`/books/${book.id}`) #{book.title}
-          td #{book.author}
-          td #{book.genre}
-          td #{book.first_published}
+          th Title
+          th Author
+          th Genre
+          th Year Released
+      tbody
+        each book in books
+          tr
+            td
+              a(href=`/books/${book.id}`) #{book.title}
+            td #{book.author}
+            td #{book.genre}
+            td #{book.first_published}
+    include ../pagination
+

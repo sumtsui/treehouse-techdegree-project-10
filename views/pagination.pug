@@ -1,0 +1,4 @@
+.pagination
+  - let n = 1;
+    while n < totalItems / perPage + 1
+      a(href=((booksPage) ? `/books/page/${n}` : `/patrons/page/${n}`) class=((n == currentPageId) ? 'active' : ''))= n++

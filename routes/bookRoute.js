@@ -41,22 +41,53 @@ router.get('/', function(req, res, next) {
       }))
       .catch(next)
   }
-  else res.redirect('/books/all');
+  else res.redirect('/books/page/1');
 });
 
-router.get('/all', function (req, res, next) {
-  Book
-    .findAll()
-    .then(books => res.render('books/list', {
-      books,
-      all: true,
-      booksPage: true
-    }))
-    .catch(next)
-});
+// router.get('/all', function (req, res, next) {
+//   Book
+//     .findAll()
+//     .then(books => res.render('books/list', {
+//       books,
+//       all: true,
+//       booksPage: true,
+//       perPage: 4
+//     }))
+//     .catch(next)
+// });
 
 router.get('/new', function (req, res, next) {
   res.render('books/new', { booksPage: true });
+});
+
+/* --- Pagination route --- */
+router.get('/page/:id', function (req, res, next) {
+  const perPage = 10;
+  Promise
+    .all([
+      Book.findAll({
+        offset: perPage * (req.params.id - 1), 
+        limit: perPage,
+        order: [['id', 'DESC']]
+      }),
+      Book.findAndCountAll(),
+    ])
+    .then(myFunc.log)
+    .then(r => {
+      return (r[0].length === 0) ?
+        next(new Error('Page not found :/'))
+        :
+        r;
+    })
+    .then(r => res.render('books/list', {
+      books: r[0],
+      totalItems: r[1].count,
+      all: true,
+      booksPage: true,
+      perPage,
+      currentPageId: req.params.id
+    }))
+    .catch(next)
 });
 
 router.get('/:id', (req, res, next) => {
@@ -68,6 +99,13 @@ router.get('/:id', (req, res, next) => {
         include: { model: Patron }
       })
     ])
+    .then(myFunc.log)
+    .then(results => {
+      return (results[0] === null) ?
+        next(new Error('Page not found :/'))
+        :
+        results;
+    })
     .then(results => [results[0], myFunc.formatDate(results[1])])
     .then(results => state = results)
     .then(results => res.render('books/detail', {
@@ -81,7 +119,7 @@ router.get('/:id', (req, res, next) => {
 router.post('/new', (req, res, next) => {
   Book
     .create(req.body)
-    .then(() => res.redirect('/books/all'))
+    .then(() => res.redirect('/books/page/1'))
     .catch(err => {
       if (err.name === 'SequelizeValidationError') {
         res.render('books/new', {
@@ -120,7 +158,7 @@ router.post('/:id', (req, res, next) => {
   Book
     .findById(req.params.id)
     .then(book => book.update(req.body))
-    .then(() => res.redirect('/books/all'))
+    .then(() => res.redirect('/books/page/1'))
     .catch(err => {
       if (err.name === 'SequelizeValidationError') {
         res.render('books/detail', {

@@ -111,27 +111,53 @@ div.errors p {
 
 form.search {
   display: inline-block;
-  margin-left: 2em;
+  margin-left: 1em;
 }
 .button-p {
   display: inline-block;
 }
 form.search button {
   font-size: .8em;
-  width: 36px;
-  height: 36px;
-  border-radius: 0 2px 2px 0;
-  background: white;
+  width: 38px;
+  height: 38px;
+  border-radius: 0 4px 4px 0;
+  background: #F0F0F0;
+  padding-bottom: .2em;
 }
 form.search input {
-  padding: .65em;
+  padding: .7em;
   border: 1px solid lightgray;
-  background: #EADEDB;
-  border-radius: 2px 0 0 2px;
+  border-radius: 4px 0 0 4px;
 }
 form.search button:hover {
   cursor: pointer;
+  background-color: white;
 }
 .search-header {
   margin-top: 1.6em;
+}
+
+.table-body {
+  display: inline-block;
+}
+.pagination {
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 2em;
+}
+.pagination a {
+  border: 1px solid lightgray;
+  cursor: pointer;
+  display: inline-block;
+  padding: .5em .8em;
+  margin: .5em;
+  border-radius: 5px;
+}
+.pagination a:hover {
+  background: #01b189;
+  color: white;
+}
+.pagination a.active {
+  background-color: #D8B493;
+  color: white;
 }
