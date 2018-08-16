@@ -15,10 +15,10 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: { msg: "Please enter loaned-on date" },
         isDate: { msg: "Please enter a vaild loaned_on date" },
-        isAfter: {
-          args: `${new Date((new Date()).getTime() - (1 * 86400000)).toJSON().slice(0, 10)}`,
-          msg: 'Loaned-on date can not be eariler than today'
-        }
+        // isAfter: {
+        //   args: `${new Date((new Date()).getTime() - (1 * 86400000)).toJSON().slice(0, 10)}`,
+        //   msg: 'Loaned-on date can not be eariler than today'
+        // }
       }
     },
     return_by: {
@@ -26,10 +26,10 @@ module.exports = (sequelize, DataTypes) => {
       validate: { 
         notEmpty: { msg: "Please enter return-by date" },
         isDate: { msg: "Please enter a vaild return-by date" },
-        isAfter: {
-          args: `${new Date().toJSON().slice(0, 10)}`,
-          msg: 'Return-by date can not be eariler than today'
-        }
+        // isAfter: {
+        //   args: `${new Date().toJSON().slice(0, 10)}`,
+        //   msg: 'Return-by date can not be eariler than today'
+        // }
       }
     },
     returned_on: {
